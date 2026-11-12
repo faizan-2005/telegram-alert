@@ -30,16 +30,16 @@ telegram-alert/
 
 5. Save → **Redeploy** (env vars ke baad redeploy zaroori hai).
 
-## Test
+## Live URL
 
 ```
-https://YOUR-PROJECT.vercel.app/api/alert?number=9876543210&key=YOUR_SECRET_KEY
+https://telegram-alert-mu.vercel.app/api/alert?number=9876543210&key=YOUR_SECRET_KEY
 ```
 
 Short alias (vercel.json rewrite):
 
 ```
-https://YOUR-PROJECT.vercel.app/alert?number=9876543210&key=YOUR_SECRET_KEY
+https://telegram-alert-mu.vercel.app/alert?number=9876543210&key=YOUR_SECRET_KEY
 ```
 
 Success response:
