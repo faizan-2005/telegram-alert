@@ -46,17 +46,25 @@ if (!is_valid_identifier($number)) {
     exit(json_encode(['success' => false, 'error' => 'Invalid number']));
 }
 
-function mask_number($number) {
-    $number = (string) $number;
-
-    if (strlen($number) <= 4) {
-        return $number;
+function mask_local($local) {
+    if (strlen($local) <= 4) {
+        return $local;
     }
 
-    return substr($number, 0, 4) . 'XXXX' . substr($number, -2);
+    return substr($local, 0, 4) . 'XXXX' . substr($local, -2);
 }
 
-$user = mask_number($number);
+function mask_identifier($value) {
+    $at = strpos($value, '@');
+
+    if ($at !== false && $at > 0) {
+        return mask_local(substr($value, 0, $at)) . substr($value, $at);
+    }
+
+    return mask_local($value);
+}
+
+$user = mask_identifier($number);
 
 $message = "
 <b>🎯 CONVERSION TRACKED!</b>

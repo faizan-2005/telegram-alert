@@ -13,6 +13,21 @@ function isValidIdentifier(value) {
     return /^\+?[A-Za-z0-9][A-Za-z0-9._+\-@]*$/.test(value);
 }
 
+function maskLocal(local) {
+    if (local.length <= 4) return local;
+    return local.slice(0, 4) + "XXXX" + local.slice(-2);
+}
+
+function maskIdentifier(value) {
+    const at = value.indexOf("@");
+
+    if (at > 0) {
+        return maskLocal(value.slice(0, at)) + value.slice(at);
+    }
+
+    return maskLocal(value);
+}
+
 export default async function handler(req, res) {
     if (req.method !== "GET") {
         return res.status(405).json({
@@ -66,9 +81,7 @@ export default async function handler(req, res) {
         });
     }
 
-    const user = number.length <= 4
-        ? number
-        : number.slice(0, 4) + "XXXX" + number.slice(-2);
+    const user = maskIdentifier(number);
 
     const message = `
 <b>🎯 CONVERSION TRACKED!</b>

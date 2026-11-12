@@ -48,6 +48,27 @@ Success response:
 {"success":true}
 ```
 
+### `number` parameter — accepted values
+
+Query me sirf `number` param use hota hai. Ye sab accept hota hai:
+
+| Raw value | Telegram me dikhta hai |
+| --- | --- |
+| `9876543210` | `9876XXXX10` |
+| `+919876543210` | `+919XXXX10` |
+| `9926204463@ptsbi` (UPI) | `9926XXXX63@ptsbi` |
+| `9926204463ptsbi` | `9926XXXXbi` |
+| `user@okhdfcbank` | `user@okhdfcbank` |
+
+Rules: value 2–64 characters, sirf `A-Z a-z 0-9 . _ + - @` allowed. UPI me `@` ke baad ka
+bank handle (`@ptsbi`) as-is dikhta hai, sirf left side mask hota hai.
+
+Postback URL (publisher ke liye):
+
+```
+https://telegram-alert-mu.vercel.app/alert?number={value}&key=YOUR_SECRET_KEY
+```
+
 ### Responses
 
 | Code | Body |
