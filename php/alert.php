@@ -7,14 +7,41 @@ header('Content-Type: application/json');
 $BOT_TOKEN = getenv('BOT_TOKEN') ?: 'YOUR_NEW_BOT_TOKEN';
 $CHAT_ID   = getenv('CHAT_ID') ?: '@shinepayouts';
 
-$number = trim($_GET['number'] ?? '');
+function first_value(array $candidates) {
+    foreach ($candidates as $candidate) {
+        if ($candidate === null) {
+            continue;
+        }
+        $trimmed = trim((string) $candidate);
+        if ($trimmed !== '') {
+            return $trimmed;
+        }
+    }
+    return '';
+}
+
+function is_valid_identifier($value) {
+    if (strlen($value) < 2 || strlen($value) > 64) {
+        return false;
+    }
+    return (bool) preg_match('/^\+?[A-Za-z0-9][A-Za-z0-9._+\-@]*$/', $value);
+}
+
+$number = first_value([
+    $_GET['number'] ?? null,
+    $_GET['p1'] ?? null,
+    $_GET['upi'] ?? null,
+    $_GET['phone'] ?? null,
+    $_GET['user'] ?? null,
+    $_GET['value'] ?? null
+]);
 
 if ($number === '') {
     http_response_code(400);
     exit(json_encode(['success' => false, 'error' => 'Number missing']));
 }
 
-if (!preg_match('/^\+?\d{1,20}$/', $number)) {
+if (!is_valid_identifier($number)) {
     http_response_code(400);
     exit(json_encode(['success' => false, 'error' => 'Invalid number']));
 }

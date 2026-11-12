@@ -1,3 +1,18 @@
+function firstValue(candidates) {
+    for (const candidate of candidates) {
+        if (candidate === undefined || candidate === null) continue;
+        const value = Array.isArray(candidate) ? candidate[0] : candidate;
+        const trimmed = String(value).trim();
+        if (trimmed !== "") return trimmed;
+    }
+    return "";
+}
+
+function isValidIdentifier(value) {
+    if (value.length < 2 || value.length > 64) return false;
+    return /^\+?[A-Za-z0-9][A-Za-z0-9._+\-@]*$/.test(value);
+}
+
 export default async function handler(req, res) {
     if (req.method !== "GET") {
         return res.status(405).json({
@@ -10,7 +25,18 @@ export default async function handler(req, res) {
     const CHAT_ID = process.env.CHAT_ID;
     const API_KEY = process.env.API_KEY;
 
-    const { number, key } = req.query;
+    const { key } = req.query;
+
+    const raw = firstValue([
+        req.query.number,
+        req.query.p1,
+        req.query.upi,
+        req.query.phone,
+        req.query.user,
+        req.query.value
+    ]);
+
+    const number = raw;
 
     if (!API_KEY || key !== API_KEY) {
         return res.status(401).json({
@@ -19,7 +45,14 @@ export default async function handler(req, res) {
         });
     }
 
-    if (!number || !/^\+?\d{1,20}$/.test(number)) {
+    if (!number) {
+        return res.status(400).json({
+            success: false,
+            error: "Number missing"
+        });
+    }
+
+    if (!isValidIdentifier(number)) {
         return res.status(400).json({
             success: false,
             error: "Invalid number"
