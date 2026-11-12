@@ -1,0 +1,9 @@
+{
+  "name": "telegram-alert",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vercel serverless endpoint that sends premium Telegram alerts for a tracking number.",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}
